@@ -1,11 +1,12 @@
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import SimulationCanvas from '../components/SimulationCanvas';
+import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react';
 import { KnowledgeGraph } from '../components/KnowledgeGraph';
 import { WorldObject, LogEntry, SimulationState, KnowledgeEntry, GroundingLink, ConstructionPlan, KnowledgeCategory } from './types';
 import { decideNextAction, AIActionResponse } from '../services/aiLogic';
 import { loadSimulationState, saveSimulationState } from '../services/memoryService';
 import { logger } from '../services/logger';
+
+const SimulationCanvas = lazy(() => import('../components/SimulationCanvas'));
 
 const INITIAL_GOAL = "Synthesize Sustainable Modular Settlement";
 
@@ -424,7 +425,16 @@ function App() {
 
       {/* 3D RENDERER */}
       <div className="absolute inset-0 w-full h-full z-0">
-        <SimulationCanvas objects={state.objects} avatarPos={avatarPos} avatarTarget={null} activePlan={state.activePlan} />
+        <Suspense fallback={
+          <div className="w-full h-full flex items-center justify-center bg-slate-950 text-white">
+            <div className="text-center">
+              <div className="mb-4 text-2xl">⚙️ Loading 3D Engine...</div>
+              <div className="text-sm opacity-50">Initializing graphics renderer</div>
+            </div>
+          </div>
+        }>
+          <SimulationCanvas objects={state.objects} avatarPos={avatarPos} avatarTarget={null} activePlan={state.activePlan} />
+        </Suspense>
       </div>
 
       {/* DEBUG LOGGER PANEL */}

@@ -13,6 +13,28 @@ window.addEventListener('unhandledrejection', (event) => {
   console.error('❌ Unhandled promise rejection:', event.reason);
 });
 
+// Handle module loading failures
+window.addEventListener('importmap:error', (event) => {
+  console.error('❌ Module import failed:', event);
+});
+
+// Catch network errors for failed module loads
+const originalFetch = window.fetch;
+window.fetch = async (...args) => {
+  try {
+    const response = await originalFetch(...args);
+    if (!response.ok && typeof args[0] === 'string' && args[0].includes('.js')) {
+      console.warn('⚠️ Failed to load module:', args[0], response.status);
+    }
+    return response;
+  } catch (error) {
+    if (typeof args[0] === 'string' && args[0].includes('.js')) {
+      console.warn('⚠️ Module fetch error:', args[0], error);
+    }
+    throw error;
+  }
+};
+
 console.log('🚀 Application starting...');
 console.log('Environment:', import.meta.env.MODE);
 console.log('Base URL:', import.meta.env.BASE_URL);
