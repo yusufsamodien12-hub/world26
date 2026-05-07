@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="src/main.tsx"></script>
     <script>
       // Detect if JavaScript is running
       console.log('✅ HTML loaded, JavaScript executing');
@@ -34,14 +34,16 @@
       
       // Detect if script fails to load
       setTimeout(() => {
-        if (document.getElementById('root').children.length === 1) {
+        const root = document.getElementById('root');
+        // If the loading status element is still there, it means React hasn't replaced it yet
+        if (document.getElementById('loading-status')) {
           const status = document.getElementById('loading-status');
           if (status) {
             status.innerHTML = '<span style="color: #ff4444;">❌ Failed to load application<br/><small>Check browser console for errors</small></span>';
           }
           console.error('❌ React app failed to mount after 10 seconds');
         }
-      }, 10000);
+      }, 15000);
     </script>
   </body>
 </html>

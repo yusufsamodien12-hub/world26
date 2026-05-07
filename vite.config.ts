@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
     const isProd = mode === 'production';
 
     return {
-      base: '/',
+      base: './',
       build: {
         rollupOptions: {
           input: {
@@ -17,7 +17,10 @@ export default defineConfig(({ mode }) => {
         }
       },
       envPrefix: 'VITE_',
-      define: {},
+      define: {
+        'process.env': {},
+        global: 'window',
+      },
       server: {
         port: 4000,
         host: '0.0.0.0',
@@ -35,7 +38,7 @@ export default defineConfig(({ mode }) => {
         }
       },
       optimizeDeps: {
-        noDiscovery: true
+        include: ['react', 'react-dom', 'three', '@react-three/fiber', '@react-three/drei']
       },
       ssr: {
         noExternal: []
