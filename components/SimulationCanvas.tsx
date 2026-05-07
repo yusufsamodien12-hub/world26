@@ -20,14 +20,17 @@ const Terrain: React.FC = () => {
   const meshRef = React.useRef<THREE.Mesh>(null);
   
   // Create a vertex-based terrain that matches getTerrainHeight logic
+  // Vast world scale: 1000x1000
   const geom = useMemo(() => {
-    const g = new THREE.PlaneGeometry(100, 100, 64, 64);
+    const g = new THREE.PlaneGeometry(1000, 1000, 128, 128);
     const pos = g.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
-      const z = pos.getY(i); // Y in PlaneGeometry is Z in World
-      const h = Math.sin(x * 0.2) * Math.cos(z * -0.2) * 1.2;
-      pos.setZ(i, h); // Displacement along Z axis of geometry
+      const z = pos.getY(i);
+      // Multi-layered noise for more "vast" look
+      const h = (Math.sin(x * 0.1) * Math.cos(z * 0.1) * 2.0) +
+                (Math.sin(x * 0.02) * Math.cos(z * 0.02) * 5.0);
+      pos.setZ(i, h);
     }
     g.computeVertexNormals();
     return g;
@@ -35,7 +38,14 @@ const Terrain: React.FC = () => {
 
   return (
     <mesh ref={meshRef} geometry={geom} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-      <meshStandardMaterial color="#0f172a" roughness={0.9} metalness={0.1} flatShading />
+      <meshStandardMaterial
+        color="#0f172a"
+        roughness={0.8}
+        metalness={0.2}
+        flatShading
+        emissive="#0c4a6e"
+        emissiveIntensity={0.05}
+      />
     </mesh>
   );
 };
@@ -43,33 +53,33 @@ const Terrain: React.FC = () => {
 const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ objects, avatarPos, avatarTarget, activePlan }) => {
   const ghostObjects = useMemo(() => {
     if (!activePlan) return [];
-    // Show all steps that are not yet completed (active or pending)
     return activePlan.steps.filter(step => step.status !== 'completed');
   }, [activePlan]);
 
   return (
     <div className="w-full h-full bg-black">
-      <Canvas camera={{ position: [18, 18, 18], fov: 40 }} shadows>
+      <Canvas camera={{ position: [20, 20, 20], fov: 45, far: 2000 }} shadows>
         <color attach="background" args={['#020617']} />
+        <fogExp2 attach="fog" args={['#020617', 0.008]} />
         
-        <ambientLight intensity={0.4} />
+        <ambientLight intensity={0.3} />
         <pointLight position={[10, 15, 10]} intensity={1.5} color="#00f2ff" />
         <directionalLight 
-          position={[-10, 20, 10]} 
+          position={[-50, 100, 50]}
           intensity={1} 
           castShadow 
-          shadow-mapSize={[2048, 2048]}
+          shadow-mapSize={[4096, 4096]}
         />
 
-        <Sky sunPosition={[100, 20, 100]} />
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+        <Sky sunPosition={[100, 10, 100]} />
+        <Stars radius={300} depth={60} count={10000} factor={6} saturation={0} fade speed={1} />
         <Environment preset="night" />
 
         <Terrain />
-        <gridHelper args={[100, 50, '#1e293b', '#0f172a']} position={[0, -0.05, 0]} />
+        <gridHelper args={[1000, 100, '#1e293b', '#0f172a']} position={[0, -0.05, 0]} />
 
-        <Sparkles count={200} scale={20} size={2} speed={0.4} color="#38bdf8" />
-        <Sparkles count={50} scale={10} size={4} speed={0.8} color="#f43f5e" opacity={0.4} />
+        <Sparkles count={500} scale={50} size={2} speed={0.4} color="#38bdf8" />
+        <Sparkles count={100} scale={30} size={4} speed={0.8} color="#f43f5e" opacity={0.4} />
 
         {/* Existing Real Objects */}
         {objects.map((obj) => (
@@ -95,8 +105,13 @@ const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ objects, avatarPos,
 
         <Avatar position={avatarPos} targetPosition={avatarTarget} isThinking={activePlan === undefined} />
 
-        <ContactShadows opacity={0.6} scale={40} blur={2} far={10} />
-        <OrbitControls makeDefault minPolarAngle={0} maxPolarAngle={Math.PI / 2.1} />
+        <ContactShadows opacity={0.4} scale={100} blur={2.5} far={20} />
+        <OrbitControls
+          makeDefault
+          target={[avatarPos[0], avatarPos[1], avatarPos[2]]}
+          minPolarAngle={0}
+          maxPolarAngle={Math.PI / 2.1}
+        />
 
         <EffectComposer disableNormalPass>
           <Bloom luminanceThreshold={1} mipmapBlur intensity={0.5} radius={0.4} />

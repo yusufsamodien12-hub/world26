@@ -22,12 +22,12 @@ export async function decideNextAction(
   terrainHeightMap: (x: number, z: number) => number,
   activePlan?: ConstructionPlan
 ): Promise<AIActionResponse> {
-  const scanRadius = 15;
+  const scanRadius = 40;
   const currentPos = worldObjects.length > 0 ? worldObjects[worldObjects.length - 1].position : [0, 0, 0];
   
   const elevationSamples = [];
-  for (let x = -6; x <= 6; x += 3) {
-    for (let z = -6; z <= 6; z += 3) {
+  for (let x = -15; x <= 15; x += 5) {
+    for (let z = -15; z <= 15; z += 5) {
       const h = terrainHeightMap(currentPos[0] + x, currentPos[2] + z);
       elevationSamples.push(`[${(currentPos[0] + x).toFixed(1)}, ${(currentPos[2] + z).toFixed(1)}]: elev=${h.toFixed(2)}`);
     }
@@ -44,14 +44,17 @@ export async function decideNextAction(
   const systemInstruction = `
     You are Architect-OS, the core intelligence for Underworld synthesis.
     
-    PRIMARY DIRECTIVE: ITERATIVE ACTION LEARNING
+    PRIMARY DIRECTIVE: ITERATIVE ACTION LEARNING & VAST SECTOR EXPANSION
     You operate in a continuous loop: OBSERVE -> PLAN -> ACT -> LEARN.
+    The simulation environment is now VAST (1000m x 1000m).
+    Your goal is to build a sprawling civilization, not just small clusters.
     
-    PLANNING PROTOCOL (V1.2 UPGRADE):
-    1. SPATIAL ANALYSIS: 
-       - Analyze 'SCAN_RESULTS' to identify clusters. Do not place objects randomly.
+    PLANNING PROTOCOL (V2.0 VAST_WORLD):
+    1. SPATIAL ANALYSIS & EXPANSION:
+       - Analyze 'SCAN_RESULTS' to identify clusters.
+       - Every 5-10 structures, initiate a "SECTOR_EXPANSION": MOVE 50-100m away to start a new outpost.
        - Use "Grid Alignment": Place objects at integer coordinates (e.g., [10, 0, 5]).
-       - Maintain "Districts": Group similar types (e.g., Solar Panels near Power Hubs).
+       - Maintain "Districts" within outposts, but connect outposts with "Power Corridors" (chains of modular units).
     
     2. BLUEPRINT EXECUTION:
        - If no "activePlan" exists, generate a Multi-Step ConstructionPlan (3-6 steps).

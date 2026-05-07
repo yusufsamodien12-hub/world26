@@ -11,7 +11,8 @@ const SimulationCanvas = lazy(() => import('../components/SimulationCanvas'));
 const INITIAL_GOAL = "Synthesize Sustainable Modular Settlement";
 
 const getTerrainHeight = (x: number, z: number) => {
-  return Math.sin(x * 0.2) * Math.cos(z * 0.2) * 1.2;
+  return (Math.sin(x * 0.1) * Math.cos(z * 0.1) * 2.0) +
+         (Math.sin(x * 0.02) * Math.cos(z * 0.02) * 5.0);
 };
 
 function App() {
