@@ -25,11 +25,17 @@ export const Avatar: React.FC<AvatarProps> = ({ position, targetPosition, isThin
       targetVec.set(...position);
       
       // Smoothly interpolate current visual position towards the target position
+      const prevPos = currentPos.current.clone();
       currentPos.current.lerp(targetVec, 0.1);
       meshRef.current.position.copy(currentPos.current);
       
+      // Movement-based tilt
+      const movement = new THREE.Vector3().subVectors(currentPos.current, prevPos);
+      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, movement.z * 5, 0.1);
+      meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, -movement.x * 5, 0.1);
+
       // Hover effect on the visual Y
-      meshRef.current.position.y += Math.sin(state.clock.elapsedTime * 2.5) * 0.12;
+      meshRef.current.position.y += Math.sin(state.clock.elapsedTime * 2) * 0.15;
       
       if (targetPosition) {
         const lookTarget = new THREE.Vector3(...targetPosition);
@@ -52,7 +58,8 @@ export const Avatar: React.FC<AvatarProps> = ({ position, targetPosition, isThin
     }
 
     if (lightRef.current) {
-      lightRef.current.intensity = isThinking ? 2 + Math.sin(state.clock.elapsedTime * 10) : 1;
+      const pulse = isThinking ? 3 + Math.sin(state.clock.elapsedTime * 12) * 2 : 1.5;
+      lightRef.current.intensity = pulse;
     }
   });
 

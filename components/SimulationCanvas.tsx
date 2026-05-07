@@ -2,6 +2,8 @@
 import React, { useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sky, Stars, ContactShadows, Environment } from '@react-three/drei';
+import { Bloom, EffectComposer, Noise, Vignette, Scanline } from '@react-three/postprocessing';
+import { Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import { WorldObject, ConstructionPlan } from '../src/types';
 import { WorldAsset } from './WorldAssets';
@@ -66,6 +68,9 @@ const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ objects, avatarPos,
         <Terrain />
         <gridHelper args={[100, 50, '#1e293b', '#0f172a']} position={[0, -0.05, 0]} />
 
+        <Sparkles count={200} scale={20} size={2} speed={0.4} color="#38bdf8" />
+        <Sparkles count={50} scale={10} size={4} speed={0.8} color="#f43f5e" opacity={0.4} />
+
         {/* Existing Real Objects */}
         {objects.map((obj) => (
           <WorldAsset 
@@ -92,6 +97,13 @@ const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ objects, avatarPos,
 
         <ContactShadows opacity={0.6} scale={40} blur={2} far={10} />
         <OrbitControls makeDefault minPolarAngle={0} maxPolarAngle={Math.PI / 2.1} />
+
+        <EffectComposer disableNormalPass>
+          <Bloom luminanceThreshold={1} mipmapBlur intensity={0.5} radius={0.4} />
+          <Noise opacity={0.05} />
+          <Vignette eskil={false} offset={0.1} darkness={1.1} />
+          <Scanline density={1.2} opacity={0.05} />
+        </EffectComposer>
       </Canvas>
     </div>
   );

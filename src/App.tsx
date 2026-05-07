@@ -258,7 +258,12 @@ function App() {
   }, [state.logs]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden text-slate-200 bg-slate-950 font-sans italic-font">
+    <div className="relative w-full h-screen overflow-hidden text-slate-200 bg-slate-950 font-sans">
+      {/* SCANNING OVERLAY */}
+      <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(56,189,248,0.05)_50%,transparent_100%)] animate-[scan_8s_linear_infinite]" style={{ backgroundSize: '100% 200%' }} />
+      </div>
+
       {/* HUD CONTROLS */}
       <div className="absolute top-8 right-8 z-20 flex flex-col gap-3 items-end">
         <div className="flex bg-black/40 backdrop-blur-xl p-1.5 rounded-2xl border border-white/5 shadow-2xl">
@@ -294,7 +299,7 @@ function App() {
         
         {/* STATS PANEL */}
         {state.ui.showStats && (
-          <div className="pointer-events-auto p-6 bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[30px] shadow-2xl animate-in slide-in-from-left-8 duration-700 flex flex-col gap-6 shrink-0">
+          <div className="pointer-events-auto p-6 bg-slate-950/40 backdrop-blur-xl border border-white/10 rounded-[30px] shadow-2xl animate-in slide-in-from-left-8 duration-700 flex flex-col gap-6 shrink-0 panel-glow">
              {/* Header */}
              <div className="flex items-center gap-4">
               <div className="w-1.5 h-12 bg-sky-400 rounded-full shadow-[0_0_20px_#38bdf8]" />
@@ -332,7 +337,7 @@ function App() {
 
         {/* API GRAPH PANEL */}
         {state.ui.showNetwork && (
-          <div className="pointer-events-auto h-32 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-[30px] shadow-2xl animate-in slide-in-from-left-8 duration-500 overflow-hidden flex flex-col shrink-0">
+          <div className="pointer-events-auto h-32 bg-slate-950/40 backdrop-blur-xl border border-white/10 rounded-[30px] shadow-2xl animate-in slide-in-from-left-8 duration-500 overflow-hidden flex flex-col shrink-0 panel-glow">
              <div className="px-5 py-3 border-b border-white/5 flex justify-between items-center bg-white/5">
               <span className="text-[9px] font-black uppercase text-emerald-400 tracking-[0.3em]">Neural Uplink</span>
               <div className="flex gap-1">
@@ -361,7 +366,7 @@ function App() {
 
         {/* LOGS PANEL */}
         {state.ui.showLogs && (
-            <div className="pointer-events-auto flex-1 min-h-[150px] bg-black/80 backdrop-blur-2xl border border-white/10 rounded-[30px] overflow-hidden shadow-2xl animate-in slide-in-from-left-8 duration-700 flex flex-col">
+            <div className="pointer-events-auto flex-1 min-h-[150px] bg-slate-950/60 backdrop-blur-xl border border-white/10 rounded-[30px] overflow-hidden shadow-2xl animate-in slide-in-from-left-8 duration-700 flex flex-col panel-glow">
             <div className="px-6 py-4 border-b border-white/5 text-[9px] font-black uppercase text-white/30 tracking-[0.3em]">Direct Activity Link</div>
             <div ref={logContainerRef} className="flex-1 overflow-y-auto p-6 space-y-2 font-mono text-[9px]">
                 {state.logs.map(log => (
@@ -398,7 +403,7 @@ function App() {
 
       {/* NEURAL DB PANEL */}
       {state.ui.showKnowledge && (
-        <div className="absolute top-24 right-8 z-20 w-[440px] max-h-[75vh] flex flex-col bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[40px] shadow-2xl overflow-hidden animate-in slide-in-from-right-8 duration-700">
+        <div className="absolute top-24 right-8 z-20 w-[440px] max-h-[75vh] flex flex-col bg-slate-950/60 backdrop-blur-3xl border border-white/10 rounded-[40px] shadow-2xl overflow-hidden animate-in slide-in-from-right-8 duration-700 panel-glow">
           <div className="p-8 bg-white/5 border-b border-white/10 flex justify-between items-center">
             <span className="text-sm font-black uppercase text-white tracking-[0.3em]">Neural Repository</span>
             <div className="w-2 h-2 bg-indigo-500 rounded-full shadow-[0_0_10px_#6366f1] animate-pulse" />
