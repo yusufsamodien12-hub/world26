@@ -7,68 +7,10 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <title>Underworld Simulation v1.0.2</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #050505;
-        font-family: 'Inter', sans-serif;
-      }
-      canvas {
-        display: block;
-      }
-      @keyframes glow {
-        0%, 100% { filter: drop-shadow(0 0 5px #00f2ff); }
-        50% { filter: drop-shadow(0 0 15px #00f2ff); }
-      }
-      .sao-font {
-        font-family: 'Courier New', Courier, monospace;
-      }
-      
-      /* Utility classes to replace Tailwind */
-      .relative { position: relative; }
-      .absolute { position: absolute; }
-      .fixed { position: fixed; }
-      .w-full { width: 100%; }
-      .h-screen { height: 100vh; }
-      .h-full { height: 100%; }
-      .overflow-hidden { overflow: hidden; }
-      .flex { display: flex; }
-      .flex-col { flex-direction: column; }
-      .items-center { align-items: center; }
-      .items-end { align-items: flex-end; }
-      .justify-center { justify-content: center; }
-      .gap-3 { gap: 0.75rem; }
-      .gap-4 { gap: 1rem; }
-      .gap-6 { gap: 1.5rem; }
-      .grid { display: grid; }
-      .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .rounded-xl { border-radius: 0.75rem; }
-      .rounded-2xl { border-radius: 1rem; }
-      .rounded-full { border-radius: 9999px; }
-      .uppercase { text-transform: uppercase; }
-      .italic { font-style: italic; }
-      .font-sans { font-family: system-ui, sans-serif; }
-      .font-mono { font-family: 'Courier New', monospace; }
-      .font-bold { font-weight: 700; }
-      .font-black { font-weight: 900; }
-      .text-white { color: white; }
-      .bg-black { background-color: black; }
-      .z-10 { z-index: 10; }
-      .z-20 { z-index: 20; }
-      .pointer-events-none { pointer-events: none; }
-      .pointer-events-auto { pointer-events: auto; }
-      .transition-all { transition: all 0.3s; }
-      .shrink-0 { flex-shrink: 0; }
-      .leading-none { line-height: 1; }
-    </style>
   </head>
   <body>
     <div id="root">
@@ -79,6 +21,7 @@
         </div>
       </div>
     </div>
+    <script type="module" src="/src/main.tsx"></script>
     <script>
       // Detect if JavaScript is running
       console.log('✅ HTML loaded, JavaScript executing');

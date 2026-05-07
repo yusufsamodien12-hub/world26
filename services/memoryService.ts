@@ -6,11 +6,6 @@ const getStateEndpoint = () => {
   // Use the defined environment variable directly for Vite compatibility
   const proxyUrl = import.meta.env.VITE_PROXY_URL || (import.meta as any)?.env?.VITE_PROXY_URL;
   
-  // New proxy doesn't support state endpoint - use localStorage instead
-  if (proxyUrl && proxyUrl.includes('ai-proxy-cloudflare-worker')) {
-    return null; // Will use localStorage fallback
-  }
-  
   if (proxyUrl && proxyUrl.includes('workers.dev')) {
     // Old proxy with state support
     const baseUrl = proxyUrl.split('/v1/')[0];

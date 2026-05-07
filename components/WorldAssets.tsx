@@ -71,10 +71,19 @@ export const WorldAsset: React.FC<{ type: WorldObjectType } & ObjectProps> = ({
             {renderMaterial("#1e293b", 0.6, 0.1, "#334155")}
           </mesh>
           {!isGhost && (
-            <mesh scale={0.9}>
-              <boxGeometry args={[2.5, 2.5, 2.5]} />
-              <meshStandardMaterial color="#38bdf8" opacity={0.1} transparent wireframe />
-            </mesh>
+            <>
+              <mesh scale={0.9}>
+                <boxGeometry args={[2.5, 2.5, 2.5]} />
+                <meshStandardMaterial color="#38bdf8" opacity={0.1} transparent wireframe />
+              </mesh>
+              {/* Glowing power lines */}
+              {[[-1.26, 0, 0], [1.26, 0, 0], [0, 0, -1.26], [0, 0, 1.26]].map((pos, i) => (
+                <mesh key={i} position={pos as [number, number, number]} rotation={i < 2 ? [0, 0, 0] : [0, Math.PI / 2, 0]}>
+                  <cylinderGeometry args={[0.05, 0.05, 2.5]} />
+                  <meshStandardMaterial color="#0ea5e9" emissive="#0ea5e9" emissiveIntensity={2} />
+                </mesh>
+              ))}
+            </>
           )}
         </group>
       );
@@ -89,6 +98,15 @@ export const WorldAsset: React.FC<{ type: WorldObjectType } & ObjectProps> = ({
             <cylinderGeometry args={[0.08, 0.12, 1]} />
             {renderMaterial("#475569")}
           </mesh>
+          {!isGhost && (
+            <group position={[0, 0.4, -0.3]} rotation={[-Math.PI / 5, 0, 0]}>
+               <mesh>
+                  <cylinderGeometry args={[0.2, 0.2, 0.1, 16]} />
+                  <meshStandardMaterial color="#334155" />
+               </mesh>
+               {/* Rotating fan would need a component with useFrame, skipping for now to keep it simple but added detail */}
+            </group>
+          )}
         </group>
       );
     case 'water_collector':
@@ -115,12 +133,16 @@ export const WorldAsset: React.FC<{ type: WorldObjectType } & ObjectProps> = ({
       return (
         <group position={position} scale={scale}>
           <mesh position={[0, 1.5, 0]} castShadow>
-            <cylinderGeometry args={[0.2, 0.3, 3]} />
+            <cylinderGeometry args={[0.1, 0.3, 3, 8]} />
             {renderMaterial("#3f2b1c")}
           </mesh>
-          <mesh position={[0, 3.5, 0]} castShadow>
-            <sphereGeometry args={[1.3, 12, 12]} />
+          <mesh position={[0, 3.2, 0]} castShadow>
+            <sphereGeometry args={[1.2, 8, 8]} />
             {renderMaterial("#064e3b")}
+          </mesh>
+          <mesh position={[0.4, 2.5, 0.3]} castShadow>
+            <sphereGeometry args={[0.7, 8, 8]} />
+            {renderMaterial("#065f46")}
           </mesh>
         </group>
       );
